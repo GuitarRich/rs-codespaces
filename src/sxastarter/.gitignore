@@ -31,3 +31,7 @@ scjssconfig.json
 
 # vercel
 .vercel
+
+
+# macOS
+.DS_Store
