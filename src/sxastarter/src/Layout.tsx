@@ -2,28 +2,28 @@
  * This Layout is needed for Starter Kit.
  */
 import React from 'react';
-import Head from 'next/head';
 import { Placeholder, LayoutServiceData, Field, HTMLLink } from '@sitecore-jss/sitecore-jss-nextjs';
-import config from 'temp/config';
-import Scripts from 'src/Scripts';
+//import config from 'temp/config';
 
 // Prefix public assets with a public URL to enable compatibility with Sitecore Experience Editor.
 // If you're not supporting the Experience Editor, you can remove this.
-const publicUrl = config.publicUrl;
+//const publicUrl = config.publicUrl;
 
 interface LayoutProps {
     layoutData: LayoutServiceData;
     headLinks: HTMLLink[];
 }
 
+/*
 interface RouteFields {
     [key: string]: unknown;
     Title?: Field;
 }
+*/
 
-const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
+const Layout = ({ layoutData }: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
-    const fields = route?.fields as RouteFields;
+    //const fields = route?.fields as RouteFields;
 
     return (
         <>
