@@ -15,6 +15,7 @@ export type SitecorePageProps = {
   dictionary: DictionaryPhrases;
   componentProps: ComponentPropsCollection;
   notFound: boolean;
+  headerLayoutData: LayoutServiceData;
   layoutData: LayoutServiceData;
   headLinks: HTMLLink[];
 };

@@ -21,21 +21,27 @@ interface RouteFields {
     Title?: Field;
 }
 
-const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
+const Header = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
     const fields = route?.fields as RouteFields;
 
     return (
         <>
+            <Scripts />
+            <Head>
+                <title>{fields?.Title?.value?.toString() || 'Page'}</title>
+                <link rel="icon" href={`${publicUrl}/favicon.ico`} />
+                {headLinks.map((headLink) => (
+                    <link rel={headLink.rel} key={headLink.href} href={headLink.href} />
+                ))}
+            </Head>
+
             {/* root placeholder for the app, which we add components to using route data */}
-            <main>
-                <div id="content">{route && <Placeholder name="headless-main" rendering={route} />}</div>
-            </main>
-            <footer>
-                <div id="footer">{route && <Placeholder name="headless-footer" rendering={route} />}</div>
-            </footer>
+            <header>
+                <div id="header" className="row">{route && <Placeholder name="headless-header" rendering={route} />}</div>
+            </header>
         </>
     );
 };
 
-export default Layout;
+export default Header;
