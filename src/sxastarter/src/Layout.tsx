@@ -23,7 +23,12 @@ interface RouteFields {
     Title?: Field;
 }
 
-const Layout = ({ layoutData, headerLayoutData, footerLayoutData, headLinks }: LayoutProps): JSX.Element => {
+const Layout = ({
+    layoutData,
+    headerLayoutData,
+    footerLayoutData,
+    headLinks
+}: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
     const { route: headerRoute } = headerLayoutData.sitecore;
     const { route: footerRoute } = footerLayoutData.sitecore;
@@ -40,18 +45,22 @@ const Layout = ({ layoutData, headerLayoutData, footerLayoutData, headLinks }: L
                 ))}
             </Head>
 
-            {/* root placeholder for the app, which we add components to using route data */}
             <header>
                 <div id="header" className="row">
                     {headerRoute && <Placeholder name="headless-header" rendering={headerRoute} />}
+                    {route && <Placeholder name="headless-header" rendering={route} />}
                 </div>
             </header>
-            {/* root placeholder for the app, which we add components to using route data */}
             <main>
-                <div id="content">{route && <Placeholder name="headless-main" rendering={route} />}</div>
+                <div id="content">
+                    {route && <Placeholder name="headless-main" rendering={route} />}
+                </div>
             </main>
             <footer>
-                <div id="footer">{footerRoute && <Placeholder name="headless-footer" rendering={footerRoute} />}</div>
+                <div id="footer">
+                    {route && <Placeholder name="headless-footer" rendering={route} />}
+                    {footerRoute && <Placeholder name="headless-footer" rendering={footerRoute} />}
+                </div>
             </footer>
         </>
     );

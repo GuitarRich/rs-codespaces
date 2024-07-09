@@ -1,8 +1,8 @@
 import config from 'temp/config';
 import {
-  GraphQLErrorPagesService,
-  SitecoreContext,
-  ErrorPages,
+    GraphQLErrorPagesService,
+    SitecoreContext,
+    ErrorPages,
 } from '@sitecore-jss/sitecore-jss-nextjs';
 import { SitecorePageProps } from 'lib/page-props';
 import NotFound from 'src/NotFound';
@@ -11,50 +11,76 @@ import Layout from 'src/Layout';
 import { GetStaticProps } from 'next';
 import { siteResolver } from 'lib/site-resolver';
 import clientFactory from 'lib/graphql-client-factory';
+import { sitecorePagePropsFactory } from 'lib/page-props-factory';
 
 const Custom404 = (props: SitecorePageProps): JSX.Element => {
-  if (!(props && props.layoutData)) {
-    return <NotFound />;
-  }
+    if (!(props && props.layoutData)) {
+        return <NotFound />;
+    }
 
-  return (
-    <SitecoreContext
-      componentFactory={componentBuilder.getComponentFactory()}
-      layoutData={props.layoutData}
-    >
-      <Layout layoutData={props.layoutData} headLinks={props.headLinks} />
-    </SitecoreContext>
-  );
+    return (
+        <SitecoreContext
+            componentFactory={componentBuilder.getComponentFactory()}
+            layoutData={props.layoutData}
+        >
+            <Layout
+                layoutData={props.layoutData}
+                headerLayoutData={props.headerLayoutData}
+                footerLayoutData={props.footerLayoutData}
+                headLinks={props.headLinks}
+            />
+        </SitecoreContext>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const site = siteResolver.getByName(config.sitecoreSiteName);
-  const errorPagesService = new GraphQLErrorPagesService({
-    clientFactory,
-    siteName: site.name,
-    language: context.locale || config.defaultLanguage,
-    retries:
-      (process.env.GRAPH_QL_SERVICE_RETRIES &&
-        parseInt(process.env.GRAPH_QL_SERVICE_RETRIES, 10)) ||
-      0,
-  });
-  let resultErrorPages: ErrorPages | null = null;
+    const site = siteResolver.getByName(config.sitecoreSiteName);
+    const errorPagesService = new GraphQLErrorPagesService({
+        clientFactory,
+        siteName: site.name,
+        language: context.locale || config.defaultLanguage,
+        retries:
+            (process.env.GRAPH_QL_SERVICE_RETRIES &&
+                parseInt(process.env.GRAPH_QL_SERVICE_RETRIES, 10)) ||
+            0,
+    });
+    let resultErrorPages: ErrorPages | null = null;
 
-  if (!process.env.DISABLE_SSG_FETCH) {
-    try {
-      resultErrorPages = await errorPagesService.fetchErrorPages();
-    } catch (error) {
-      console.log('Error occurred while fetching error pages');
-      console.log(error);
+    if (!process.env.DISABLE_SSG_FETCH) {
+        try {
+            resultErrorPages = await errorPagesService.fetchErrorPages();
+        } catch (error) {
+            console.log('Error occurred while fetching error pages');
+            console.log(error);
+        }
     }
-  }
 
-  return {
-    props: {
-      headLinks: [],
-      layoutData: resultErrorPages?.notFoundPage?.rendered || null,
-    },
-  };
+    // Call the header
+    const header = await sitecorePagePropsFactory.create({
+        ...context,
+        params: {
+            ...context.params,
+            path: '/_layout/header',
+        },
+    });
+
+    // Call the footer
+    const footer = await sitecorePagePropsFactory.create({
+        ...context,
+        params: {
+            ...context.params,
+            path: '/_layout/footer',
+        },
+    });
+
+    return {
+        props: {
+            headLinks: [],
+            layoutData: resultErrorPages?.notFoundPage?.rendered || null,
+            headerLayoutData: header.layoutData,
+            footerLayoutData: footer.layoutData,
+        },
+    };
 };
 
 export default Custom404;

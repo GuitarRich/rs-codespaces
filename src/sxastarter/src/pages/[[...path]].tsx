@@ -6,8 +6,8 @@ import {
     RenderingType,
     SitecoreContext,
     ComponentPropsContext,
-    EditingComponentPlaceholder,
     StaticPath,
+    EditingComponentPlaceholder,
 } from '@sitecore-jss/sitecore-jss-nextjs';
 import { handleEditorFastRefresh } from '@sitecore-jss/sitecore-jss-nextjs/utils';
 import { SitecorePageProps } from 'lib/page-props';
@@ -50,13 +50,16 @@ const SitecorePage = ({
                       If you are using Experience Editor only, this logic can be removed, Layout can be left.
                     */}
                     {isComponentRendering ? (
-                        <EditingComponentPlaceholder rendering={layoutData.sitecore.route} />
+                        <EditingComponentPlaceholder
+                            rendering={layoutData.sitecore.route}
+                        />
                     ) : (
                         <Layout
                             layoutData={layoutData}
                             headerLayoutData={headerLayoutData}
                             footerLayoutData={footerLayoutData}
-                            headLinks={headLinks} />
+                            headLinks={headLinks}
+                        />
                     )}
                 </div>
             </SitecoreContext>
