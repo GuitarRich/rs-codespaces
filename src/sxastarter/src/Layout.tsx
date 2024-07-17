@@ -27,7 +27,7 @@ const Layout = ({
     layoutData,
     headerLayoutData,
     footerLayoutData,
-    headLinks
+    headLinks,
 }: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
     const { route: headerRoute } = headerLayoutData.sitecore;
