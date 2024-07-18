@@ -13,8 +13,6 @@ const publicUrl = config.publicUrl;
 
 interface LayoutProps {
     layoutData: LayoutServiceData;
-    headerLayoutData: LayoutServiceData;
-    footerLayoutData: LayoutServiceData;
     headLinks: HTMLLink[];
 }
 
@@ -25,13 +23,12 @@ interface RouteFields {
 
 const Layout = ({
     layoutData,
-    headerLayoutData,
-    footerLayoutData,
     headLinks,
 }: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
-    const { route: headerRoute } = headerLayoutData.sitecore;
-    const { route: footerRoute } = footerLayoutData.sitecore;
+    
+    console.log("route:", route);
+    
     const fields = route?.fields as RouteFields;
 
     return (
@@ -47,7 +44,6 @@ const Layout = ({
 
             <header>
                 <div id="header" className="row">
-                    {headerRoute && <Placeholder name="headless-header" rendering={headerRoute} />}
                     {route && <Placeholder name="headless-header" rendering={route} />}
                 </div>
             </header>
@@ -59,7 +55,6 @@ const Layout = ({
             <footer>
                 <div id="footer">
                     {route && <Placeholder name="headless-footer" rendering={route} />}
-                    {footerRoute && <Placeholder name="headless-footer" rendering={footerRoute} />}
                 </div>
             </footer>
         </>

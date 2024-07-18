@@ -7,20 +7,20 @@ import {
     SitecoreContext,
     ComponentPropsContext,
     StaticPath,
-    EditingComponentPlaceholder,
+    ComponentRendering,
+    HtmlElementRendering,
 } from '@sitecore-jss/sitecore-jss-nextjs';
 import { handleEditorFastRefresh } from '@sitecore-jss/sitecore-jss-nextjs/utils';
 import { SitecorePageProps } from 'lib/page-props';
 import { sitecorePagePropsFactory } from 'lib/page-props-factory';
 import { componentBuilder } from 'temp/componentBuilder';
 import { sitemapFetcher } from 'lib/sitemap-fetcher';
+import { EditingComponentPlaceholderWithLayoutRoutes } from 'components/EditingComponentPlaceholderWithLayoutRoutes';
 
 const SitecorePage = ({
     notFound,
     componentProps,
     layoutData,
-    headerLayoutData,
-    footerLayoutData,
     headLinks,
 }: SitecorePageProps): JSX.Element => {
     useEffect(() => {
@@ -42,7 +42,7 @@ const SitecorePage = ({
         <ComponentPropsContext value={componentProps}>
             <SitecoreContext
                 componentFactory={componentBuilder.getComponentFactory({ isEditing: false })}
-                layoutData={headerLayoutData}
+                layoutData={layoutData}
             >
                 <div className={mainClassPageEditing}>
                     {/*
@@ -50,12 +50,10 @@ const SitecorePage = ({
                       If you are using Experience Editor only, this logic can be removed, Layout can be left.
                     */}
                     {isComponentRendering ? (
-                        <EditingComponentPlaceholder rendering={layoutData.sitecore.route} />
+                        <EditingComponentPlaceholderWithLayoutRoutes rendering={layoutData.sitecore.route} />
                     ) : (
                         <Layout
                             layoutData={layoutData}
-                            headerLayoutData={headerLayoutData}
-                            footerLayoutData={footerLayoutData}
                             headLinks={headLinks}
                         />
                     )}
@@ -111,8 +109,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             path: '/_layout/header',
         },
     });
-
-    props.headerLayoutData = header.layoutData;
+    props.layoutData.sitecore.route?.placeholders["headless-header"].push(...header.layoutData.sitecore.route?.placeholders["headless-header"] as Array<ComponentRendering | HtmlElementRendering>);
 
     // Call the footer
     const footer = await sitecorePagePropsFactory.create({
@@ -122,7 +119,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             path: '/_layout/footer',
         },
     });
-    props.footerLayoutData = footer.layoutData;
+    props.layoutData.sitecore.route?.placeholders["headless-footer"].push(...footer.layoutData.sitecore.route?.placeholders["headless-footer"] as Array<ComponentRendering | HtmlElementRendering>);
+    
 
     return {
         props,

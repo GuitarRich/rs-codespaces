@@ -5,7 +5,7 @@ import {
     EDITING_COMPONENT_PLACEHOLDER,
     RouteData,
 } from '@sitecore-jss/sitecore-jss/layout';
-import { Placeholder } from '@sitecore-jss/sitecore-jss-nextjs/types/components/Placeholder';
+import { Placeholder } from '@sitecore-jss/sitecore-jss-nextjs';
 
 export const EditingComponentPlaceholderWithLayoutRoutes = ({
     rendering,
