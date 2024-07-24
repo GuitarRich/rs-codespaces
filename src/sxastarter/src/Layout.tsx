@@ -26,9 +26,6 @@ const Layout = ({
     headLinks,
 }: LayoutProps): JSX.Element => {
     const { route } = layoutData.sitecore;
-    
-    console.log("route:", route);
-    
     const fields = route?.fields as RouteFields;
 
     return (

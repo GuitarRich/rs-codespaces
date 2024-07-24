@@ -7,8 +7,6 @@ import {
     SitecoreContext,
     ComponentPropsContext,
     StaticPath,
-    ComponentRendering,
-    HtmlElementRendering,
 } from '@sitecore-jss/sitecore-jss-nextjs';
 import { handleEditorFastRefresh } from '@sitecore-jss/sitecore-jss-nextjs/utils';
 import { SitecorePageProps } from 'lib/page-props';
@@ -100,28 +98,6 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
 // revalidation (or fallback) is enabled and a new request comes in.
 export const getStaticProps: GetStaticProps = async (context) => {
     const props = await sitecorePagePropsFactory.create(context);
-
-    // Call the header
-    const header = await sitecorePagePropsFactory.create({
-        ...context,
-        params: {
-            ...context.params,
-            path: '/_layout/header',
-        },
-    });
-    props.layoutData.sitecore.route?.placeholders["headless-header"].push(...header.layoutData.sitecore.route?.placeholders["headless-header"] as Array<ComponentRendering | HtmlElementRendering>);
-
-    // Call the footer
-    const footer = await sitecorePagePropsFactory.create({
-        ...context,
-        params: {
-            ...context.params,
-            path: '/_layout/footer',
-        },
-    });
-    props.layoutData.sitecore.route?.placeholders["headless-footer"].push(...footer.layoutData.sitecore.route?.placeholders["headless-footer"] as Array<ComponentRendering | HtmlElementRendering>);
-    
-
     return {
         props,
         // Next.js will attempt to re-generate the page:
