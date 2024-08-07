@@ -11,7 +11,6 @@ import { GetStaticProps } from 'next';
 import config from 'temp/config';
 import { siteResolver } from 'lib/site-resolver';
 import clientFactory from 'lib/graphql-client-factory';
-import { sitecorePagePropsFactory } from 'lib/page-props-factory';
 
 /**
  * Rendered in case if we have 500 error
