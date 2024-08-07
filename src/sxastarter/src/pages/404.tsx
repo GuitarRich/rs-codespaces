@@ -25,8 +25,6 @@ const Custom404 = (props: SitecorePageProps): JSX.Element => {
         >
             <Layout
                 layoutData={props.layoutData}
-                headerLayoutData={props.headerLayoutData}
-                footerLayoutData={props.footerLayoutData}
                 headLinks={props.headLinks}
             />
         </SitecoreContext>
@@ -56,29 +54,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
 
     // Call the header
-    const header = await sitecorePagePropsFactory.create({
-        ...context,
-        params: {
-            ...context.params,
-            path: '/_layout/header',
-        },
-    });
-
-    // Call the footer
-    const footer = await sitecorePagePropsFactory.create({
-        ...context,
-        params: {
-            ...context.params,
-            path: '/_layout/footer',
-        },
-    });
-
     return {
         props: {
             headLinks: [],
             layoutData: resultErrorPages?.notFoundPage?.rendered || null,
-            headerLayoutData: header.layoutData,
-            footerLayoutData: footer.layoutData,
         },
     };
 };
